@@ -16,13 +16,13 @@ def _limit_is_active_choices() -> dict:
 
 
 class Question(Model):
-    class TypeChoices(TextChoices):
-        TEXT_ANSWER = 'TA', 'Text answer'
-        SINGLE_ANSWER = 'SA', 'Single answer'
-        MULTIPLE_CHOICE = 'MC', 'Multiple choice'
+    class Type(TextChoices):
+        TEXT_ANSWER = 'TA', 'Ответ с текстом'
+        SINGLE_ANSWER = 'SA', 'Ответ с выбором одного варианта'
+        MULTIPLE_CHOICE = 'MC', 'Ответ с выбором нескольких вариантов'
 
     text = CharField(max_length=254, verbose_name='Текст')
-    type = CharField(max_length=2, choices=TextChoices, verbose_name='Тип')
+    type = CharField(max_length=2, choices=Type.choices, verbose_name='Тип')
     poll = ForeignKey('Poll', CASCADE,
                       limit_choices_to=_limit_end_date_choices,
                       verbose_name='Опрос')
@@ -45,7 +45,7 @@ class Answer(Model):
 
 class Poll(Model):
     name = CharField(max_length=254, verbose_name='Название')
-    start_date = DateField(auto_now_add=True, verbose_name='Дата начала')
+    start_date = DateField(verbose_name='Дата начала')
     end_date = DateField(null=True, blank=True, verbose_name='Дата окончания')
     description = TextField(blank=True, default='', verbose_name='Описание')
 
