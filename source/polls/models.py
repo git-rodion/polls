@@ -7,8 +7,12 @@ class User(AbstractUser):
     """Пользователь системы."""
 
 
-def _limit_end_date_choices():
+def _limit_end_date_choices() -> dict:
     return {'end_date__isnull': True}
+
+
+def _limit_is_active_choices() -> dict:
+    return {'is_active': True}
 
 
 class Question(Model):
@@ -26,6 +30,17 @@ class Question(Model):
     class Meta:
         verbose_name = 'Вопрос'
         verbose_name_plural = 'Вопросы'
+
+
+class Answer(Model):
+    user = ForeignKey(User, CASCADE, limit_choices_to=_limit_is_active_choices,
+                      verbose_name='Пользователь')
+    question = ForeignKey(Question, CASCADE, verbose_name='Вопрос')
+    text = TextField(verbose_name='Текст отввета')
+
+    class Meta:
+        verbose_name = 'Ответ'
+        verbose_name_plural = 'Ответы'
 
 
 class Poll(Model):
