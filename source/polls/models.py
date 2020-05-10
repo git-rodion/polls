@@ -1,3 +1,32 @@
-from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.db.models import (CharField, DateField, Model, TextChoices,
+                              TextField)
 
-# Create your models here.
+
+class User(AbstractUser):
+    """Пользователь системы."""
+
+
+class Question(Model):
+    class TypeChoices(TextChoices):
+        TEXT_ANSWER = 'TA', 'Text answer'
+        SINGLE_ANSWER = 'SA', 'Single answer'
+        MULTIPLE_CHOICE = 'MC', 'Multiple choice'
+
+    text = CharField(max_length=254, verbose_name='Текст')
+    type = CharField(max_length=2, choices=TextChoices, verbose_name='Тип')
+
+    class Meta:
+        verbose_name = 'Вопрос'
+        verbose_name_plural = 'Вопросы'
+
+
+class Poll(Model):
+    name = CharField(max_length=254, verbose_name='Название')
+    start_date = DateField(auto_now_add=True, verbose_name='Дата начала')
+    end_date = DateField(null=True, blank=True, verbose_name='Дата окончания')
+    description = TextField(blank=True, default='', verbose_name='Описание')
+
+    class Meta:
+        verbose_name = 'Опрос'
+        verbose_name_plural = 'Опросы'

@@ -120,3 +120,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Base user model reference
+# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/
+
+AUTH_USER_MODEL = 'polls.User'
