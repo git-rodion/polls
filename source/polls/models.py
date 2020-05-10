@@ -1,10 +1,14 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import (CharField, DateField, Model, TextChoices,
-                              TextField)
+from django.db.models import (CASCADE, CharField, DateField, ForeignKey, Model,
+                              TextChoices, TextField)
 
 
 class User(AbstractUser):
     """Пользователь системы."""
+
+
+def _limit_end_date_choices():
+    return {'end_date__isnull': True}
 
 
 class Question(Model):
@@ -15,6 +19,9 @@ class Question(Model):
 
     text = CharField(max_length=254, verbose_name='Текст')
     type = CharField(max_length=2, choices=TextChoices, verbose_name='Тип')
+    poll = ForeignKey('Poll', CASCADE,
+                      limit_choices_to=_limit_end_date_choices,
+                      verbose_name='Опрос')
 
     class Meta:
         verbose_name = 'Вопрос'
