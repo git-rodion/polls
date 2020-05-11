@@ -12,8 +12,9 @@ Class-based views
 """
 from django.urls import path
 
-from polls.views import ActivePolls
+from polls.views import ActivePolls, CreateAnswer
 
 urlpatterns = [
     path('active/', ActivePolls.as_view(), name='active_polls'),
+    path('answer/', CreateAnswer.as_view(), name='answer')
 ]
