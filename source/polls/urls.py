@@ -15,5 +15,5 @@ from django.urls import path
 from polls.views import ActivePolls
 
 urlpatterns = [
-    path('', ActivePolls.as_view(), name='polls')
+    path('active/', ActivePolls.as_view(), name='active_polls'),
 ]
