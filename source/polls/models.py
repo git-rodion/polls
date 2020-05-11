@@ -23,12 +23,13 @@ class Poll(Model):
 
 class Question(Model):
     class TypeChoices(TextChoices):
-        TEXT_ANSWER = 'TA', 'Ответ с текстом'
-        SINGLE_ANSWER = 'SA', 'Ответ с выбором одного варианта'
-        MULTIPLE_CHOICE = 'MC', 'Ответ с выбором нескольких вариантов'
+        TEXT_ANSWER = ('TEXT_ANSWER', 'Ответ с текстом')
+        SINGLE_ANSWER = ('SINGLE_ANSWER', 'Ответ с выбором одного варианта')
+        MULTIPLE_CHOICE = ('MULTIPLE_CHOICE',
+                           'Ответ с выбором нескольких вариантов')
 
     text = CharField(max_length=254, verbose_name='Текст')
-    type = CharField(max_length=2, choices=TypeChoices.choices,
+    type = CharField(max_length=15, choices=TypeChoices.choices,
                      verbose_name='Тип')
     poll = ForeignKey(Poll, CASCADE, verbose_name='Опрос')
 
