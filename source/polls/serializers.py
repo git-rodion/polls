@@ -1,24 +1,52 @@
 from rest_framework.exceptions import ValidationError
 from rest_framework.serializers import ModelSerializer
 
-from polls.models import Answer, Poll, Question
+from polls.models import Answer, AnswerOption, Poll, Question, User
 
 
-class QuestionSerializer(ModelSerializer):
+class _QuestionSerializer(ModelSerializer):
     class Meta:
         model = Question
         exclude = ['poll']
 
 
-class PollsSerializer(ModelSerializer):
-    question_set = QuestionSerializer(many=True)
+class _QuestionWithoutIDSerializer(_QuestionSerializer):
+    class Meta(_QuestionSerializer.Meta):
+        exclude = _QuestionSerializer.Meta.exclude + ['id']
+
+
+class PollSerializer(ModelSerializer):
+    question_set = _QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Poll
         fields = '__all__'
 
 
-class CreateAnswerSerializer(ModelSerializer):
+class _ChoicesSerializer(ModelSerializer):
+    class Meta:
+        model = AnswerOption
+        exclude = ['question']
+
+
+class _AnswerDetailSerializer(ModelSerializer):
+    question = _QuestionWithoutIDSerializer(read_only=True)
+    choices = _ChoicesSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Answer
+        exclude = ['user', 'id']
+
+
+class UserSerializer(ModelSerializer):
+    answer_set = _AnswerDetailSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['answer_set']
+
+
+class AnswerSerializer(ModelSerializer):
     class Meta:
         model = Answer
         fields = '__all__'

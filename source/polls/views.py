@@ -1,17 +1,13 @@
-from django.http import HttpRequest
 from django.utils.datetime_safe import datetime
-from rest_framework.generics import CreateAPIView, ListAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 
-from polls.models import Poll
-from polls.serializers import CreateAnswerSerializer, PollsSerializer
+from polls.models import Poll, User
+from polls.serializers import AnswerSerializer, PollSerializer, UserSerializer
 
 
 class ActivePolls(ListAPIView):
     queryset = Poll.objects.all()
-    serializer_class = PollsSerializer
-
-    def get(self, request: HttpRequest, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    serializer_class = PollSerializer
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -19,5 +15,10 @@ class ActivePolls(ListAPIView):
                                end_date__gte=datetime.now().date())
 
 
+class UserAnswersDetail(RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class CreateAnswer(CreateAPIView):
-    serializer_class = CreateAnswerSerializer
+    serializer_class = AnswerSerializer
