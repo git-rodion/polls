@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.test import TestCase
 from django.urls import reverse
 from django.utils.datetime_safe import date
@@ -56,6 +58,10 @@ class ActivePollsTestCase(APITestCase):
     def setUp(self) -> None:
         Poll.objects.create(name='Проверочный опрос', start_date=date.today(),
                             end_date=date.today(),
+                            description='Описание для опроса')
+        yesterday = date.today() - timedelta(days=1)
+        Poll.objects.create(name='Неактивный опрос', start_date=yesterday,
+                            end_date=yesterday,
                             description='Описание для опроса')
 
     def test_polls_are_active(self):
