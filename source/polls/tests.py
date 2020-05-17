@@ -1,5 +1,8 @@
 from django.test import TestCase
+from django.urls import reverse
 from django.utils.datetime_safe import date
+from rest_framework.status import HTTP_200_OK
+from rest_framework.test import APITestCase
 
 from polls.models import AnswerOption, Poll, Question
 
@@ -47,3 +50,22 @@ class AnswerOptionTestCase(TestCase):
         content = 'Django'
         answer_option = AnswerOption.objects.get(content=content)
         self.assertEqual(str(answer_option), content)
+
+
+class ActivePollsTestCase(APITestCase):
+    def setUp(self) -> None:
+        Poll.objects.create(name='Проверочный опрос', start_date=date.today(),
+                            end_date=date.today(),
+                            description='Описание для опроса')
+
+    def test_polls_are_active(self):
+        url = reverse('active_polls')
+        response = self.client.get(url)
+        expected_response =[{'id': 1, 'question_set': [],
+                             'name': 'Проверочный опрос',
+                             'start_date': str(date.today()),
+                             'end_date': str(date.today()),
+                             'description': 'Описание для опроса'}]
+
+        self.assertListEqual(response.json(), expected_response)
+        self.assertEqual(response.status_code, HTTP_200_OK)
