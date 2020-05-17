@@ -23,7 +23,7 @@ class Question(Model):
                      verbose_name='Тип')
     poll = ForeignKey('Poll', CASCADE, verbose_name='Опрос')
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Строковое представление вопроса."""
         return f'{self.type}: {self.text}'
 
@@ -38,6 +38,6 @@ class AnswerOption(Model):
     question = ForeignKey('Question', CASCADE, verbose_name='Тип вопроса')
     content = TextField(verbose_name='Вариант ответа')
 
-    def __str__(self):
+    def __str__(self) -> str:
         """Строковое представление варианта ответа."""
         return self.content

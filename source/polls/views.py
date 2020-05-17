@@ -1,5 +1,5 @@
 """Набор представлений для Polls приложения."""
-
+from django.db.models import QuerySet
 from django.utils.datetime_safe import datetime
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView
 
@@ -13,7 +13,7 @@ class ActivePolls(ListAPIView):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         """Извлечение только активных опросов по датам."""
         queryset = super().get_queryset()
         return queryset.filter(start_date__gte=datetime.now().date(),
