@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  backend:
+    build: .
+    command: ["./run-with-migrations.sh"]
+    depends_on:
+      - database
+    env_file:
+      - .example.env
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./source:/usr/src/app
+  database:
+    image: postgres:12.2-alpine
+    env_file:
+      - .example.env
