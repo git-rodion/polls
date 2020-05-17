@@ -1,4 +1,5 @@
 """Модуль аутентификации для набора моделей."""
+
 from django.contrib.auth.models import AbstractUser
 
 
