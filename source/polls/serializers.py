@@ -84,7 +84,7 @@ class AnswerSerializer(ModelSerializer):
         :param attrs: Набор данных (поле: значение) в целостности.
         :return: Проверенный набор данных.
         """
-        answers = (attrs['text'], attrs['choices'])
+        answers = (attrs.get('text', ''), attrs.get('choices', []))
         if not any(answers) or all(answers):
             raise ValidationError(detail='Недопустимое количество '
                                          'ответов на вопрос.')
