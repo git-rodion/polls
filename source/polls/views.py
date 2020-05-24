@@ -16,8 +16,9 @@ class ActivePolls(ListAPIView):
     def get_queryset(self) -> QuerySet:
         """Извлечение только активных опросов по датам."""
         queryset = super().get_queryset()
-        return queryset.filter(start_date__gte=datetime.now().date(),
-                               end_date__gte=datetime.now().date())
+        current_date = datetime.now().date()
+        return queryset.filter(start_date__lte=current_date,
+                               end_date__gte=current_date)
 
 
 class UserAnswersDetail(RetrieveAPIView):
