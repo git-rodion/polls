@@ -9,7 +9,16 @@ docker-compose build
 docker-compose run --service-ports backend
 ```
 
-## Endpoint'ы:
-* GET /polls/active: Получение списка активных опросов
-* GET /polls/users/<идентификатор_пользователя>/answers-detail: Получение пройденных пользователем опросов с детализацией по ответам
-* POST /polls/answer: Ответ на вопросы (см. GET /polls/answer в браузере)
+## Доступные запросы:
+* Получение списка активных опросов: GET /polls/active
+* Получение пройденных пользователем опросов с детализацией по ответам: GET /polls/users/<идентификатор_пользователя>/answers-detail
+* POST /polls/answer.
+    * Тело запроса (application/json):
+        ```json
+        {
+            "text": "<Ответ в виде текста в случае, если тип вопроса: TEXT_ANSWER>",
+            "choices": ["Допустимый вариант ответа (для SINGLE_ANSWER), связанный с вопросом (или их множество для SEVERAL_OPTIONS_ANSWER)"],
+            "user": "Идентификатор пользователя, который отвечает на вопрос",
+            "question": "Идентификатор вопроса"
+        }
+        ```
